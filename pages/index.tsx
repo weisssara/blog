@@ -26,8 +26,8 @@ const Home: NextPageWithAuthAndLayout = () => {
     'post.feed',
     getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
   ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['post.like'], {
+  const feedQuery = trpc.post.feed.useQuery(undefined, feedQueryPathAndInput)
+  const likeMutation = trpc.post.like.useMutation({
     onMutate: async (likedPostId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
@@ -60,7 +60,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['post.unlike'], {
+  const unlikeMutation = trpc.post.unlike.useMutation({
     onMutate: async (unlikedPostId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 

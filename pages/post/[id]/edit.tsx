@@ -10,11 +10,8 @@ import toast from 'react-hot-toast'
 const EditPostPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const postQuery = trpc.useQuery([
-    'post.detail',
-    { id: Number(router.query.id) },
-  ])
-  const editPostMutation = trpc.useMutation('post.edit', {
+  const postQuery = trpc.post.detail.useQuery({ id: Number(router.query.id) })
+  const editPostMutation = trpc.post.edit.useMutation({
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
     },

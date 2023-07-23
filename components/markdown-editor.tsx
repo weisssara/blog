@@ -368,7 +368,7 @@ function Suggestion({
     }
   )
 
-  const mentionListQuery = trpc.useQuery(['user.mentionList'], {
+  const mentionListQuery = trpc.user.mentionList.useQuery(undefined, {
     enabled: state.isOpen && isMentionType,
     staleTime: 5 * 60 * 1000,
   })

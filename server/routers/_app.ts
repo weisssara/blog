@@ -1,13 +1,13 @@
-import superjson from 'superjson'
-import { createRouter } from '../create-router'
+import { router } from '../trpc'
+
 import { commentRouter } from './comment'
 import { postRouter } from './post'
 import { userRouter } from './user'
 
-export const appRouter = createRouter()
-  .transformer(superjson)
-  .merge('post.', postRouter)
-  .merge('comment.', commentRouter)
-  .merge('user.', userRouter)
+export const appRouter = router({
+  user: userRouter,
+  post: postRouter,
+  comment: commentRouter,
+})
 
 export type AppRouter = typeof appRouter

@@ -66,7 +66,7 @@ function ProfileInfo() {
   const profileQueryPathAndInput = getProfileQueryPathAndInput(
     String(router.query.userId)
   )
-  const profileQuery = trpc.useQuery(profileQueryPathAndInput)
+  const profileQuery = trpc.user.profile.useQuery(profileQueryPathAndInput)
 
   const [isEditProfileDialogOpen, setIsEditProfileDialogOpen] =
     React.useState(false)
@@ -193,8 +193,8 @@ function ProfileFeed() {
       authorId: String(router.query.userId),
     },
   ]
-  const profileFeedQuery = trpc.useQuery(profileFeedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['post.like'], {
+  const profileFeedQuery = trpc.post.feed.useQuery(profileFeedQueryPathAndInput)
+  const likeMutation = trpc.post.like.useMutation({
     onMutate: async (likedPostId) => {
       await utils.cancelQuery(profileFeedQueryPathAndInput)
 
@@ -227,7 +227,7 @@ function ProfileFeed() {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['post.unlike'], {
+  const unlikeMutation = trpc.post.unlike.useMutation({
     onMutate: async (unlikedPostId) => {
       await utils.cancelQuery(profileFeedQueryPathAndInput)
 
@@ -369,7 +369,7 @@ function EditProfileDialog({
   })
   const router = useRouter()
   const utils = trpc.useContext()
-  const editUserMutation = trpc.useMutation('user.edit', {
+  const editUserMutation = trpc.user.edit.useMutation({
     onSuccess: () => {
       window.location.reload()
       return utils.invalidateQueries(
@@ -445,7 +445,7 @@ function UpdateAvatarDialog({
 }) {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [uploadedImage, setUploadedImage] = React.useState(user.image)
-  const updateUserAvatarMutation = trpc.useMutation('user.update-avatar', {
+  const updateUserAvatarMutation = trpc.user.updateAvatar.useMutation({
     onSuccess: () => {
       window.location.reload()
     },

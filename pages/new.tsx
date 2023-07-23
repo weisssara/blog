@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 
 const NewPostPage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
-  const addPostMutation = trpc.useMutation('post.add', {
+  const addPostMutation = trpc.post.add.useMutation({
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
     },

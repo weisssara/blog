@@ -58,8 +58,8 @@ const PostPage: NextPageWithAuthAndLayout = () => {
   const postQueryPathAndInput = getPostQueryPathAndInput(
     Number(router.query.id)
   )
-  const postQuery = trpc.useQuery(postQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['post.like'], {
+  const postQuery = trpc.useQuery(undefined, undefined, postQueryPathAndInput)
+  const likeMutation = trpc.post.like.useMutation({
     onMutate: async (likedPostId) => {
       await utils.cancelQuery(postQueryPathAndInput)
 
@@ -83,7 +83,7 @@ const PostPage: NextPageWithAuthAndLayout = () => {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['post.unlike'], {
+  const unlikeMutation = trpc.post.unlike.useMutation({
     onMutate: async (unlikedPostId) => {
       await utils.cancelQuery(postQueryPathAndInput)
 
@@ -442,7 +442,7 @@ type CommentFormData = {
 function AddCommentForm({ postId }: { postId: number }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
-  const addCommentMutation = trpc.useMutation('comment.add', {
+  const addCommentMutation = trpc.comment.add.useMutation({
     onSuccess: () => {
       return utils.invalidateQueries(getPostQueryPathAndInput(postId))
     },
@@ -508,7 +508,7 @@ function EditCommentForm({
   onDone: () => void
 }) {
   const utils = trpc.useContext()
-  const editCommentMutation = trpc.useMutation('comment.edit', {
+  const editCommentMutation = trpc.comment.edit.useMutation({
     onSuccess: () => {
       return utils.invalidateQueries(getPostQueryPathAndInput(postId))
     },
@@ -583,7 +583,7 @@ function ConfirmDeleteCommentDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const deleteCommentMutation = trpc.useMutation('comment.delete', {
+  const deleteCommentMutation = trpc.comment.delete.useMutation({
     onSuccess: () => {
       return utils.invalidateQueries(getPostQueryPathAndInput(postId))
     },
@@ -634,7 +634,7 @@ function ConfirmDeleteDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const router = useRouter()
-  const deletePostMutation = trpc.useMutation('post.delete', {
+  const deletePostMutation = trpc.post.delete.useMutation({
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
     },
@@ -682,7 +682,7 @@ function ConfirmHideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const hidePostMutation = trpc.useMutation('post.hide', {
+  const hidePostMutation = trpc.post.hide.useMutation({
     onSuccess: () => {
       return utils.invalidateQueries(getPostQueryPathAndInput(postId))
     },
@@ -735,7 +735,7 @@ function ConfirmUnhideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const unhidePostMutation = trpc.useMutation('post.unhide', {
+  const unhidePostMutation = trpc.post.unhide.useMutation({
     onSuccess: () => {
       return utils.invalidateQueries(getPostQueryPathAndInput(postId))
     },
